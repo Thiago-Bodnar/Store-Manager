@@ -6,16 +6,12 @@ const productsController = {
     res.status(200).json(products);
   },
 
-  async get(req, res, next) {
-    try {
+  async get(req, res) {
       const { id } = await productsService.validateParamsId(req.params);
       await productsService.checkIfExists(id);
       const product = await productsService.get(id);
 
       res.status(200).json(product);
-    } catch (err) {
-      next(err);
-    }
   },
 };
 
