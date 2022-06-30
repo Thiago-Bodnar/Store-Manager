@@ -21,13 +21,22 @@ const productsModel = {
   },
 
   async exists(id) {
-        const sql = `
-    SELECT *
-    FROM StoreManager.products
-    WHERE id = ?
+    const sql = `
+      SELECT *
+      FROM StoreManager.products
+      WHERE id = ?
     `;
     const [[exists]] = await db.query(sql, [id]);
     return !!exists;
+  },
+
+  async add(data) {
+    const sql = `
+    INSERT INTO  StoreManager.products (name)
+    VALUES (?)`;
+
+    const [{ insertId }] = await db.query(sql, [data.name]);
+    return insertId;
   },
 };
 

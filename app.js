@@ -20,6 +20,9 @@ app.use((err, _req, res, _next) => {
     case 'NotFoundError':
       res.status(404).json({ message });
       break;
+    case 'UnprocessableError':
+      res.status(422).json({ message });
+      break;
     default:
       console.warn(err); res.sendStatus(500);
       break;
