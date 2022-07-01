@@ -32,6 +32,20 @@ const salesService = {
     const sale = salesModel.add(data);
     return sale;
   },
+
+  async list() {
+    const list = salesModel.list();
+    return list;
+  },
+
+  serialize(data) {
+    return ({
+      saleId: data.sale_id,
+      date: data.date,
+      productId: data.product_id,
+      quantity: data.quantity,
+    });
+  },
 };
 
 module.exports = salesService;

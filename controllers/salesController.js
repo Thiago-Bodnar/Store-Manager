@@ -10,6 +10,12 @@ const salesController = {
 
     res.status(201).json(sale);
   },
+
+  async list(_req, res) {
+    const sales = await salesService.list();
+    const formatedData = sales.map(salesService.serialize);
+    res.status(200).json(formatedData);
+  },
 };
 
 module.exports = salesController;
