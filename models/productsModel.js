@@ -38,6 +38,16 @@ const productsModel = {
     const [{ insertId }] = await db.query(sql, [data.name]);
     return insertId;
   },
+
+  async getIds() {
+    const sql = `
+    SELECT id FROM StoreManager.products;
+    `;
+    const [ids] = await db.query(sql);
+    const formatIds = ids.map((id) => id.id);
+    
+    return formatIds;
+  },
 };
 
 module.exports = productsModel;

@@ -11,7 +11,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', productsRoute);
-app.use('sales', salesRoute);
+app.use('/sales', salesRoute);
 
 app.use((err, _req, res, _next) => {
   const { name, message } = err;
