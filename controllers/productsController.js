@@ -1,4 +1,3 @@
-const { checkNameLength } = require('../services/productsService');
 const productsService = require('../services/productsService');
 
 const productsController = {
