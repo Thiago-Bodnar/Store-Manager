@@ -46,6 +46,10 @@ const productsService = {
       await productsModel.edit(changes, id);
     }
   },
+
+  async delete(id) {
+    await productsModel.delete(id);
+  },
 };
 
 module.exports = productsService;
