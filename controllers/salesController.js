@@ -16,6 +16,15 @@ const salesController = {
     const formatedData = sales.map(salesService.serialize);
     res.status(200).json(formatedData);
   },
+
+    async get(req, res) {
+      const { id } = await salesService.validateParamsId(req.params);
+      await salesService.checkIfExists(id);
+      const sale = await salesService.get(id);
+      const formatedSale = sale.map(salesService.serialize);
+
+      res.status(200).json(formatedSale);
+  },
 };
 
 module.exports = salesController;

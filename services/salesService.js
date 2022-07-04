@@ -6,6 +6,10 @@ const NotFoundError = require('../errors/NotFoundError');
 const UnprocessableError = require('../errors/UnprocessableError');
 
 const salesService = {
+    validateParamsId: runSchema(Joi.object({
+    id: Joi.number().required().positive().integer(),
+    })),
+  
   validateBody: runSchema(
     Joi.object({
       productId: Joi.number().required(),
@@ -39,12 +43,32 @@ const salesService = {
   },
 
   serialize(data) {
+    if (data.sale_id) {
     return ({
       saleId: data.sale_id,
       date: data.date,
       productId: data.product_id,
       quantity: data.quantity,
     });
+    }
+    
+    return ({
+      date: data.date,
+      productId: data.product_id,
+      quantity: data.quantity,
+    });
+  },
+
+  async checkIfExists(id) {
+    const exists = await salesModel.exists(id);
+    if (!exists) {
+      throw new NotFoundError('Sale not found');
+    }
+  },
+
+    async get(id) {
+    const sale = await salesModel.get(id);
+    return sale;
   },
 };
 

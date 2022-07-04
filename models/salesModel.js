@@ -33,14 +33,29 @@ const salesModel = {
 
   async get(id) {
     const sql = `
-    SELECT *
-    FROM StoreManager.sales
-    WHERE id = ?
+    SELECT 
+    date, product_id, quantity
+FROM
+    StoreManager.sales AS A
+        INNER JOIN
+    StoreManager.sales_products AS B ON A.id = B.sale_id
+WHERE
+    id = (?);
     `;
-    const [[product]] = await db.query(sql, [id]);
+    const [product] = await db.query(sql, [id]);
+
     return product;
   },
 
+    async exists(id) {
+    const sql = `
+      SELECT *
+      FROM StoreManager.sales
+      WHERE id = ?
+    `;
+    const [[exists]] = await db.query(sql, [id]);
+    return !!exists;
+  },
 };
 
 module.exports = salesModel;
