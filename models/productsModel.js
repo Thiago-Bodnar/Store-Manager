@@ -48,6 +48,15 @@ const productsModel = {
     
     return formatIds;
   },
+
+    async edit(changes, id) {
+    const sql = `
+    UPDATE StoreManager.products
+    SET ?
+    WHERE id = ?;`;
+
+    await db.query(sql, [changes, id]);
+    },
 };
 
 module.exports = productsModel;

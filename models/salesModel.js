@@ -56,6 +56,7 @@ WHERE
     const [[exists]] = await db.query(sql, [id]);
     return !!exists;
   },
+    
 };
 
 module.exports = salesModel;

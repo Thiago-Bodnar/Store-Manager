@@ -41,6 +41,11 @@ const productsService = {
     return id;
   },
 
+  async edit(changes, id) {
+    if (Object.keys(changes).length) {
+      await productsModel.edit(changes, id);
+    }
+  },
 };
 
 module.exports = productsService;
