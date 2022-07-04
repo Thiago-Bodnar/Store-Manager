@@ -17,14 +17,22 @@ const salesController = {
     res.status(200).json(formatedData);
   },
 
-    async get(req, res) {
-      const { id } = await salesService.validateParamsId(req.params);
-      await salesService.checkIfExists(id);
-      const sale = await salesService.get(id);
-      const formatedSale = sale.map(salesService.serialize);
+  async get(req, res) {
+    const { id } = await salesService.validateParamsId(req.params);
+    await salesService.checkIfExists(id);
+    const sale = await salesService.get(id);
+    const formatedSale = sale.map(salesService.serialize);
 
-      res.status(200).json(formatedSale);
+    res.status(200).json(formatedSale);
   },
+    
+  async delete(req, res) {
+    const { id } = await salesService.validateParamsId(req.params);
+    await salesService.checkIfExists(id);
+    await salesService.delete(id);
+
+    res.sendStatus(204);
+    },
 };
 
 module.exports = salesController;

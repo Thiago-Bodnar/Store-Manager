@@ -70,6 +70,10 @@ const salesService = {
     const sale = await salesModel.get(id);
     return sale;
   },
+    
+  async delete(id) {
+    await salesModel.delete(id);
+    },
 };
 
 module.exports = salesService;

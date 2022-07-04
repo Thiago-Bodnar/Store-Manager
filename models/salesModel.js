@@ -56,7 +56,14 @@ WHERE
     const [[exists]] = await db.query(sql, [id]);
     return !!exists;
   },
-    
+  
+  async delete(id) {
+    const sql = `
+    DELETE FROM StoreManager.sales
+    WHERE id = ?;`;
+
+    await db.query(sql, [id]);
+    },
 };
 
 module.exports = salesModel;
