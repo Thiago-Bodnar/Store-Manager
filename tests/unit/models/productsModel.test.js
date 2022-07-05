@@ -44,17 +44,39 @@ describe('productsModel', () => {
       
       expect(error).to.be.an('object').and.to.have.property('message', 'Product not found');
     });
+  });
 
-    describe('add', () => {
-      it('Ao receber um valor name, salva o dado no banco e retorna o id', async () => {
-        const expectedId = 1;
+  describe('add', () => {
+    it('Ao receber um valor name, salva o dado no banco e retorna o id', async () => {
+      const expectedId = 1;
 
-        sinon.stub(db, 'query').resolves([{ insertId: expectedId }]);
+      sinon.stub(db, 'query').resolves([{ insertId: expectedId }]);
 
-        const id = await productsModel.add({ name: 'Capa da invisibilidade' });
+      const id = await productsModel.add({ name: 'Capa da invisibilidade' });
 
-        expect(id).to.be.eq(expectedId);
-      });
+      expect(id).to.be.eq(expectedId);
     });
+  });
+  
+  describe('exists', () => {
+    it('Se o id informado existe, retorna true', async () => {
+      sinon.stub(db, 'query').resolves([[true]])
+
+      const exists = await productsModel.exists(1);
+
+      expect(exists).to.be.true;
+    });
+
+    it('Se o id informado não existe, retorna false', async () => {
+      sinon.stub(db, 'query').resolves([[false]])
+
+      const exists = await productsModel.exists(1406);
+
+      expect(exists).to.be.false;
+    });
+  });
+
+  describe('getIds', () => {
+    it
   });
 });
