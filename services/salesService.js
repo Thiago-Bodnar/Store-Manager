@@ -73,7 +73,14 @@ const salesService = {
     
   async delete(id) {
     await salesModel.delete(id);
-    },
+  },
+  
+  async edit(changes, saleId, oldProductIds) {
+    if (changes.length) {
+      const updatedSales = await salesModel.edit(changes, saleId, oldProductIds);
+      return updatedSales;
+    }
+  },
 };
 
 module.exports = salesService;

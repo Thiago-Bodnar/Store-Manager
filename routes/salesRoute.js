@@ -8,5 +8,6 @@ salesRoute.post('/', asyncHandler(salesController.add));
 salesRoute.get('/', asyncHandler(salesController.list));
 salesRoute.get('/:id', asyncHandler(salesController.get));
 salesRoute.delete('/:id', asyncHandler(salesController.delete));
+salesRoute.put('/:id', asyncHandler(salesController.edit));
 
 module.exports = salesRoute;

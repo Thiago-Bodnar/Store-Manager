@@ -1,4 +1,5 @@
 const salesService = require('../services/salesService');
+const salesModel = require('../models/salesModel');
 
 const salesController = {
   async add(req, res) {
@@ -32,7 +33,20 @@ const salesController = {
     await salesService.delete(id);
 
     res.sendStatus(204);
-    },
+  },
+  
+  async edit(req, res) {
+    const { id } = await salesService.validateParamsId(req.params);
+    const changes = req.body;
+    await salesService.checkIfExists(id);
+    changes.forEach((sale) => salesService.validateBody(sale));
+    changes.forEach((sale) => salesService.checkQuantity(sale.quantity));
+    await salesService.checkIfProductsExists(changes);
+    const oldProductIds = await salesModel.getProductIdsBySale(id);
+    const update = await salesService.edit(changes, id, oldProductIds);
+
+    res.status(200).json(update);
+  },
 };
 
 module.exports = salesController;
