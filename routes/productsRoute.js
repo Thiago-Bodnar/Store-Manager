@@ -4,6 +4,7 @@ const productsController = require('../controllers/productsController');
 
 const productsRoute = Router();
 
+productsRoute.get('/search', asyncHandler(productsController.search));
 productsRoute.get('/', asyncHandler(productsController.list));
 productsRoute.get('/:id', asyncHandler(productsController.get));
 productsRoute.post('/', asyncHandler(productsController.add));
