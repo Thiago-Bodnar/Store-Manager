@@ -199,4 +199,45 @@ describe('productsController', () => {
       expect(res.json.calledWith({id: 1, name: 'Capa da invisibilidade' })).to.be.true;
     });
   });
+
+  describe('delete', () => {
+    it('Se o id passado é inválido, retorna erro', () => {
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+      req.params = { id: 'teste' };
+
+      expect(productsController.delete(req, res))
+        .to.be.rejectedWith(ValidationError);
+    });
+
+    it('Quando o id passado não é encontrado, retorna erro', () => {
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+      req.params = { id: 11 };
+
+      expect(productsController.delete(req, res))
+        .to.be.rejectedWith(NotFoundError);
+    });
+
+    it('deleta com sucesso', async () => {
+      const req = {};
+      const res = {};
+
+      res.sendStatus = sinon.stub().returns(res);
+
+      req.params = { id: 1 }
+
+      sinon.stub(productsService, 'delete').resolves();
+
+      await productsController.delete(req, res);
+
+      expect(res.sendStatus.calledWith(204)).to.be.true;
+    });
+  });
 });
