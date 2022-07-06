@@ -95,7 +95,7 @@ describe('productsService', () => {
   });
 
   describe('search', () => {
-    it('Se não é passado nenhum parâmetro, lista todos os produtos',
+    it('Quando a busca é vazia, lista todos os produtos',
       async () => {
         const products = [
         { id: 1, name: 'Martelo de Thor' },
@@ -114,7 +114,7 @@ describe('productsService', () => {
         expect(data).to.be.deep.eq(products);
       });
     
-    it('Retorna os produtos que seu nome contém o termo passado', 
+    it('Retorna os produtos que o nome contém o termo da busca', 
       async () => {
         const product = [{ id: 1, name: 'Martelo de Thor' }];
 

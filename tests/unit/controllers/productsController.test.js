@@ -83,50 +83,120 @@ describe('productsController', () => {
       expect(res.status.calledWith(200)).to.be.equal(true);
       expect(res.json.calledWith(list)).to.be.eq(true);
     });
+  });
 
-    describe('add', () => {
-      it('Lança um erro ao passar name inválido ou inexistente', async () => {
-        const req = {};
-        const res = {};
+  describe('add', () => {
+    it('Lança um erro ao passar name inválido ou inexistente', async () => {
+      const req = {};
+      const res = {};
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub();
+
+    req.body = { name: '' };
+      
+      expect(productsController.add(req, res))
+        .to.be.rejectedWith(ValidationError);
+    });
+
+    it('Lança um erro quando name tem menos de 5 caracteres', () => {
+      const req = {};
+      const res = {};
 
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub();
 
-      req.body = { name: '' };
-        
-        expect(productsController.add(req, res))
-          .to.be.rejectedWith(ValidationError);
-      });
+      req.body = { name: 'Aoba' };
+      
+      expect(productsController.add(req, res))
+        .to.be.rejectedWith(UnprocessableError);
+    });
 
-      it('Lança um erro quando name tem menos de 5 caracteres', () => {
-        const req = {};
-        const res = {};
+    it('Adiciona com sucesso', async () => {
+      const req = {};
+      const res = {};
 
-        res.status = sinon.stub().returns(res);
-        res.json = sinon.stub();
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+  
+      req.body = { name: 'Capa da invisibilidade' };
 
-        req.body = { name: 'Aoba' };
-        
-        expect(productsController.add(req, res))
-          .to.be.rejectedWith(UnprocessableError);
-      });
+      sinon.stub(productsService, 'get').resolves({id: 4, name: 'Capa da invisibilidade' });
 
-      // it('Adiciona com sucesso', async () => {
-      //   const req = {};
-      //   const res = {};
+      await productsController.add(req, res);
 
-      //   res.status = sinon.stub().returns(res);
-      //   res.json = sinon.stub();
-    
-      //   req.body = { name: 'Capa da invisibilidade' };
+      expect(res.status.calledWith(201)).to.be.true;
+      expect(res.json.calledWith({id: 4, name: 'Capa da invisibilidade' })).to.be.true;
+    });
+  });
 
-      //   sinon.stub(productsService, 'add').resolves([1]);
+  describe('edit', () => {
+    it('Se o id passado é inválido, retorna erro', () => {
+      const req = {};
+      const res = {};
 
-      //   await productsController.add(req, res);
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+      req.params = { id: 'teste' };
 
-      //   expect(res.status.calledWith(201)).to.be.equal(true);
-      //   expect(res.json.calledWith({ id: 1, name: 'Capa da invisibilidade' })).to.be.equal(true);
-      // });
+      expect(productsController.edit(req, res))
+        .to.be.rejectedWith(ValidationError);
+    });
+
+    it('Quando o id passado não é encontrado, retorna erro', () => {
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+      req.params = { id: 11 };
+
+      expect(productsController.edit(req, res))
+        .to.be.rejectedWith(NotFoundError);
+    });
+
+    it('Lança um erro ao passar name inválido ou inexistente', async () => {
+      const req = {};
+      const res = {};
+
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub();
+
+    req.body = { name: '' };
+      
+      expect(productsController.edit(req, res))
+        .to.be.rejectedWith(ValidationError);
+    });
+
+    it('Lança um erro quando name tem menos de 5 caracteres', () => {
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+
+      req.body = { name: 'Aoba' };
+      
+      expect(productsController.edit(req, res))
+        .to.be.rejectedWith(UnprocessableError);
+    });
+
+    it('Edita com sucesso', async () => {
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+
+      req.params = { id: 1 }
+      req.body = { name: 'Capa da invisibilidade' };
+
+      sinon.stub(productsService, 'get').resolves({id: 1, name: 'Capa da invisibilidade' });
+
+      await productsController.edit(req, res);
+
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.calledWith({id: 1, name: 'Capa da invisibilidade' })).to.be.true;
     });
   });
 });
