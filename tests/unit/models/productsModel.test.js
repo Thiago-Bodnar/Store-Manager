@@ -77,6 +77,16 @@ describe('productsModel', () => {
   });
 
   describe('getIds', () => {
-    it
+    it('Retorna um array com os ids dos produtos cadastrados', async () => {
+      sinon.stub(db, 'query').resolves([[
+        { id: 1, name: 'Martelo de Thor' },
+        { id: 2, name: 'Traje de encolhimento' },
+        { id: 3, name: 'Escudo do Capitão América' }, 
+      ]]);
+
+      const ids = await productsModel.getIds();
+
+      expect(ids).to.be.an('array').and.to.deep.eq([1, 2, 3]);
+    });
   });
 });
