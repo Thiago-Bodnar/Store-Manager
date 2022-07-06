@@ -75,4 +75,18 @@ describe('productsService', () => {
       });
   });
 
+  describe('validateBodyAdd', () => {
+    it('Se o name for válido, retorna o mesmo',  () => {
+      const body = { name: 'Capa da Invisibilidade' }
+
+      const check =  productsService.validateBodyAdd(body);
+
+      expect(check).to.be.deep.eq({ name: 'Capa da Invisibilidade' });
+    });
+
+       it('Se recebe um name inválido, dispara um erro', () => { 
+      expect(() => productsService.validateBodyAdd({ name: 1 })).to
+        .throws('"name" must be a string');
+    });
+  });
 });
