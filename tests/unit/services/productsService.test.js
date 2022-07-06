@@ -10,6 +10,10 @@ const productsModel = require('../../../models/productsModel');
 use(chaiAsPromised);
 
 describe('productsService', () => { 
+  beforeEach(() => {
+    sinon.restore();
+  });
+
   describe('validateParamsId', () => { 
     it('Se recebe um id válido, retorna o mesmo', () => { 
       const id = productsService.validateParamsId({ id: 1 });
@@ -88,5 +92,41 @@ describe('productsService', () => {
       expect(() => productsService.validateBodyAdd({ name: 1 })).to
         .throws('"name" must be a string');
     });
+  });
+
+  describe('search', () => {
+    it('Se não é passado nenhum parâmetro, lista todos os produtos',
+      async () => {
+        const products = [
+        { id: 1, name: 'Martelo de Thor' },
+        { id: 2, name: 'Traje de encolhimento' },
+        { id: 3, name: 'Escudo do Capitão América' }, 
+      ];
+
+      sinon.stub(productsModel, 'list').resolves([
+        { id: 1, name: 'Martelo de Thor' },
+        { id: 2, name: 'Traje de encolhimento' },
+        { id: 3, name: 'Escudo do Capitão América' }, 
+      ]);
+        
+        const data = await productsService.search('');
+
+        expect(data).to.be.deep.eq(products);
+      });
+    
+    it('Retorna os produtos que seu nome contém o termo passado', 
+      async () => {
+        const product = [{ id: 1, name: 'Martelo de Thor' }];
+
+      sinon.stub(productsModel, 'list').resolves([
+        { id: 1, name: 'Martelo de Thor' },
+        { id: 2, name: 'Traje de encolhimento' },
+        { id: 3, name: 'Escudo do Capitão América' }, 
+      ]);
+        
+        const data = await productsService.search('Mar');
+
+        expect(data).to.be.deep.eq(product);
+      });
   });
 });
